@@ -1,0 +1,61 @@
+package Modelo;
+
+public class Vehiculo {
+    private String Placa;
+    private String Marca;
+    private int Modelo;
+    private float PrecioDiario;
+    private String Estado; // Disponible, Alquilado
+    public Vehiculo() {
+    }
+    public String getPlaca() {
+        return Placa;
+    }
+    public void setPlaca(String placa) {
+        Placa = placa;
+    }
+    public String getMarca() {
+        return Marca;
+    }
+    public void setMarca(String marca) {
+        Marca = marca;
+    }
+    public int getModelo() {
+        return Modelo;
+    }
+    public void setModelo(int modelo) {
+        Modelo = modelo;
+    }
+    public float getPrecioDiario() {
+        return PrecioDiario;
+    }
+    public void setPrecioDiario(float precioDiario) {
+        PrecioDiario = precioDiario;
+    }
+    public String getEstado() {
+        return Estado;
+    }
+    public void setEstado(String estado) {
+        Estado = estado;
+    }
+
+
+    private boolean alfaNumerico(String texto, int posicion) {
+        if (posicion == texto.length()) {
+            return true;
+
+        }
+        if (!Character.isLetterOrDigit(texto.charAt(posicion))) {
+            return false;
+        }
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        } else {
+            return alfaNumerico(texto, posicion + 1);
+        } 
+
+    }
+    
+
+    
+}
