@@ -1,10 +1,24 @@
 package Vista;
 
+import java.util.LinkedList;
 import java.util.Scanner;
+import Modelo.CamionetaSUV;
+import Modelo.CarroSedan;
+import Modelo.Cliente;
+import Modelo.ContratoRenting;
+import Modelo.Vehiculo;
+import Validaciones.ValidacionesCliente;
+import Validaciones.ValidacionesContrato;
 import Validaciones.ValidacionesMenu;
+import Validaciones.ValidacionesVehiculo;
 
 public class MetodosMenu {
     ValidacionesMenu v = new ValidacionesMenu();
+    Informe inf = new Informe();
+    
+    LinkedList<Cliente> clientes = new LinkedList<>();
+    LinkedList<Vehiculo> vehiculos = new LinkedList<>();
+    LinkedList<ContratoRenting> contratos = new LinkedList<>();
 
     public String MenuClientes(Scanner sc) {
         boolean continuar = true;
@@ -150,6 +164,6 @@ public class MetodosMenu {
     }
 
     public String ImprimirInformeGeneral() {
-        return "Informe general: funcionalidad pendiente de conectar.";
+        return inf.InformeGeneral(clientes, vehiculos, contratos);
     }
 }

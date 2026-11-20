@@ -1,6 +1,6 @@
 package Modelo;
 
-public class Vehiculo {
+public abstract class Vehiculo {
     private String Placa;
     private String Marca;
     private int Modelo;
@@ -9,6 +9,10 @@ public class Vehiculo {
 
     public Vehiculo() {
     }
+
+    public abstract String getTipo();
+
+    public abstract String detalleEspecifico();
 
     public String getPlaca() {
         return Placa;
