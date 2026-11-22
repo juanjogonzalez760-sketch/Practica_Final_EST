@@ -1,6 +1,5 @@
 package Vista;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import Modelo.Cliente;
 import Modelo.ContratoRenting;
@@ -9,100 +8,77 @@ import Modelo.Vehiculo;
 public class MetodosCliente {
     MetodosVehiculo mv = new MetodosVehiculo();
 
-    private boolean Vacio(String dato) {
-        return dato == null || dato.trim().isEmpty();
-    }
-
-    public Cliente BuscarCliente(LinkedList<Cliente> clientes, String cedula) {
-        if (cedula == null || cedula.trim().isEmpty()) {
-            return null; // Retorna null si la cedula es nula o vacia
-        }
-        for (Cliente cliente : clientes) {
-            if (cedula.trim().equalsIgnoreCase(cliente.getCedula())) {
-                return cliente;
+    public Cliente BuscarCliente(LinkedList<Cliente> l, String cedula) {
+        for (Cliente o : l) {
+            if (o.getCedula().equalsIgnoreCase(cedula)) {
+                return o;
             }
         }
-        return null; // Retorna null si no se encuentra el cliente
+        return null;
     }
 
-    public String RegistrarCliente(LinkedList<Cliente> clientes, String cedula, String nombre, String apellido,
+    public String RegistrarCliente(LinkedList<Cliente> l, String cedula, String nombre, String apellido,
             String telefono, String direccion, String licencia) {
-        if (Vacio(cedula) || Vacio(nombre) || Vacio(apellido) || Vacio(telefono)
-                || Vacio(direccion) || Vacio(licencia)) {
-            return "Error: Todos los campos son obligatorios.";
+        if (BuscarCliente(l, cedula) != null) {
+            return "Ya existe un cliente con esa cedula";
         }
-
-        if (BuscarCliente(clientes, cedula) != null) {
-            return "Error: Ya existe un cliente registrado con esa cedula.";
-        }
-
-        Cliente nuevoCliente = new Cliente();
-        nuevoCliente.setCedula(cedula.trim());
-        nuevoCliente.setNombre(nombre.trim());
-        nuevoCliente.setApellido(apellido.trim());
-        nuevoCliente.setTelefono(telefono.trim());
-        nuevoCliente.setDireccion(direccion.trim());
-        nuevoCliente.setLicenciaConduccion(licencia.trim());
-
-        clientes.add(nuevoCliente);
-        return "Cliente registrado exitosamente.";
+        Cliente o = new Cliente();
+        o.setCedula(cedula);
+        o.setNombre(nombre);
+        o.setApellido(apellido);
+        o.setTelefono(telefono);
+        o.setDireccion(direccion);
+        o.setLicenciaConduccion(licencia);
+        l.add(o);
+        return "Cliente registrado";
     }
 
-    // La cedula no se modifica: es la llave del cliente.
-    public String ModificarCliente(LinkedList<Cliente> clientes, String cedula, String nombre, String apellido,
+    public String ModificarCliente(LinkedList<Cliente> l, String cedula, String nombre, String apellido,
             String telefono, String direccion, String licencia) {
-        Cliente cliente = BuscarCliente(clientes, cedula);
-        if (cliente == null) {
+        Cliente o = BuscarCliente(l, cedula);
+        if (o == null) {
             return "El cliente no existe";
         }
-        if (Vacio(nombre) || Vacio(apellido) || Vacio(telefono) || Vacio(direccion) || Vacio(licencia)) {
-            return "Error: Todos los campos son obligatorios.";
-        }
-        cliente.setNombre(nombre.trim());
-        cliente.setApellido(apellido.trim());
-        cliente.setTelefono(telefono.trim());
-        cliente.setDireccion(direccion.trim());
-        cliente.setLicenciaConduccion(licencia.trim());
-        return "Cliente modificado correctamente";
+        o.setNombre(nombre);
+        o.setApellido(apellido);
+        o.setTelefono(telefono);
+        o.setDireccion(direccion);
+        o.setLicenciaConduccion(licencia);
+        return "Cliente modificado";
     }
 
-    // Sincronizacion: al eliminar un cliente tambien se eliminan sus contratos
-    // y los vehiculos de sus contratos activos quedan disponibles.
-    public String EliminarCliente(LinkedList<Cliente> clientes, LinkedList<ContratoRenting> contratos,
+    public String EliminarCliente(LinkedList<Cliente> l, LinkedList<ContratoRenting> contratos,
             LinkedList<Vehiculo> vehiculos, String cedula) {
-        Cliente cliente = BuscarCliente(clientes, cedula);
-        if (cliente == null) {
+        Cliente o = BuscarCliente(l, cedula);
+        if (o == null) {
             return "El cliente no existe";
         }
-        int eliminados = 0;
-        Iterator<ContratoRenting> it = contratos.iterator();
-        while (it.hasNext()) {
-            ContratoRenting o = it.next();
-            if (cliente.getCedula().equalsIgnoreCase(o.getCedulaCliente())) {
-                if (o.getActivo()) {
-                    Vehiculo carro = mv.BuscarVehiculo(vehiculos, o.getPlacaVehiculo());
-                    if (carro != null) {
-                        carro.setEstado("disponible");
+        int i = 0;
+        while (i < contratos.size()) {
+            ContratoRenting c = contratos.get(i);
+            if (c.getCedulaCliente().equalsIgnoreCase(cedula)) {
+                if (c.getActivo()) {
+                    Vehiculo v = mv.BuscarVehiculo(vehiculos, c.getPlacaVehiculo());
+                    if (v != null) {
+                        v.setEstado("disponible");
                     }
                 }
-                it.remove();
-                eliminados++;
+                contratos.remove(i);
+            } else {
+                i++;
             }
         }
-        clientes.remove(cliente);
-        return "Cliente eliminado correctamente. Contratos eliminados: " + eliminados;
+        l.remove(o);
+        return "Cliente eliminado";
     }
 
-    public String ConsultarCliente(LinkedList<Cliente> clientes, String cedula) {
-        Cliente cliente = BuscarCliente(clientes, cedula);
-        if (cliente == null) {
+    public String ConsultarCliente(LinkedList<Cliente> l, String cedula) {
+        Cliente o = BuscarCliente(l, cedula);
+        if (o == null) {
             return "El cliente no existe";
         }
-        return "Cedula: " + cliente.getCedula()
-                + "\nNombre: " + cliente.getNombre()
-                + "\nApellido: " + cliente.getApellido()
-                + "\nTelefono: " + cliente.getTelefono()
-                + "\nDireccion: " + cliente.getDireccion()
-                + "\nLicencia: " + cliente.getLicenciaConduccion();
+        return "Cedula: " + o.getCedula() + "\nNombre: " + o.getNombre() + "\nApellido: " + o.getApellido()
+                + "\nTelefono: " + o.getTelefono() + "\nDireccion: " + o.getDireccion() + "\nLicencia: "
+                + o.getLicenciaConduccion();
     }
 }
