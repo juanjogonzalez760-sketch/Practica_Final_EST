@@ -13,10 +13,14 @@ public class ValidacionesMenu {
     }
 
     public int ValidarOpcion(Scanner sc) {
+        return ValidarOpcion(sc, 1, 5);
+    }
+
+    public int ValidarOpcion(Scanner sc, int minimo, int maximo) {
         int opcion = ValidarEntero(sc);
-        if (opcion < 1 || opcion > 5) {
-            System.out.println("Esta opcion no existe. Ingrese un numero entre 1 y 5:");
-            return ValidarOpcion(sc);
+        if (opcion < minimo || opcion > maximo) {
+            System.out.println("Esta opcion no existe. Ingrese un numero entre " + minimo + " y " + maximo + ":");
+            return ValidarOpcion(sc, minimo, maximo);
         }
         return opcion;
     }
