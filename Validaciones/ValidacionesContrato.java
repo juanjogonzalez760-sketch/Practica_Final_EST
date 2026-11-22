@@ -51,4 +51,13 @@ public class ValidacionesContrato {
         }
         return dato;
     }
+    
+        public String ValidarFechaFin(Scanner sc, String inicio) {
+        String fin = ValidarFecha(sc);
+        if (CalcularDias(inicio, fin) == 0) {
+            System.out.println("La fecha final debe ser posterior a " + inicio + ". Ingrese otra fecha:");
+            return ValidarFechaFin(sc, inicio);
+        }
+        return fin;
+    }
 }
