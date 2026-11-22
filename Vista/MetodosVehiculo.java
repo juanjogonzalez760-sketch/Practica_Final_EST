@@ -1,6 +1,5 @@
 package Vista;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import Modelo.CamionetaSUV;
 import Modelo.CarroSedan;
@@ -9,94 +8,67 @@ import Modelo.Vehiculo;
 
 public class MetodosVehiculo {
 
-    private boolean Vacio(String dato) {
-        return dato == null || dato.trim().isEmpty();
-    }
-
-    public Vehiculo BuscarVehiculo(LinkedList<Vehiculo> vehiculos, String placa) {
-        if (Vacio(placa)) {
-            return null;
-        }
-        for (Vehiculo carro : vehiculos) {
-            if (placa.trim().equalsIgnoreCase(carro.getPlaca())) {
-                return carro;
+    public Vehiculo BuscarVehiculo(LinkedList<Vehiculo> l, String placa) {
+        for (Vehiculo o : l) {
+            if (o.getPlaca().equalsIgnoreCase(placa)) {
+                return o;
             }
         }
         return null;
     }
 
-    // Recibe el vehiculo ya armado (CarroSedan o CamionetaSUV): polimorfismo.
-    public String RegistrarVehiculo(LinkedList<Vehiculo> vehiculos, Vehiculo nuevo) {
-        if (nuevo == null || Vacio(nuevo.getPlaca())) {
-            return "Error: El vehiculo no es valido.";
+    public String RegistrarVehiculo(LinkedList<Vehiculo> l, Vehiculo o) {
+        if (BuscarVehiculo(l, o.getPlaca()) != null) {
+            return "Ya existe un vehiculo con esa placa";
         }
-        if (BuscarVehiculo(vehiculos, nuevo.getPlaca()) != null) {
-            return "Error: Ya existe un vehiculo con esa placa.";
-        }
-        vehiculos.add(nuevo);
-        return "Vehiculo registrado correctamente";
+        l.add(o);
+        return "Vehiculo registrado";
     }
 
-    // La placa y el estado no se modifican: el estado lo controlan los contratos.
-    public String ModificarVehiculo(LinkedList<Vehiculo> vehiculos, String placa, String marca,
-            int modelo, float precioDiario) {
-        Vehiculo carro = BuscarVehiculo(vehiculos, placa);
-        if (carro == null) {
+    public String ModificarVehiculo(LinkedList<Vehiculo> l, String placa, String marca, int modelo,
+            float precio) {
+        Vehiculo o = BuscarVehiculo(l, placa);
+        if (o == null) {
             return "El vehiculo no existe";
         }
-        if (Vacio(marca) || modelo <= 0 || precioDiario <= 0 || !Float.isFinite(precioDiario)) {
-            return "Error: Marca, modelo y precio deben ser validos.";
-        }
-        carro.setMarca(marca.trim());
-        carro.setModelo(modelo);
-        carro.setPrecioDiario(precioDiario);
-        return "Vehiculo modificado correctamente";
+        o.setMarca(marca);
+        o.setModelo(modelo);
+        o.setPrecioDiario(precio);
+        return "Vehiculo modificado";
     }
 
-    // Sincronizacion: al eliminar un vehiculo tambien se eliminan sus contratos.
-    public String EliminarVehiculo(LinkedList<Vehiculo> vehiculos, LinkedList<ContratoRenting> contratos,
-            String placa) {
-        Vehiculo carro = BuscarVehiculo(vehiculos, placa);
-        if (carro == null) {
+    public String EliminarVehiculo(LinkedList<Vehiculo> l, LinkedList<ContratoRenting> contratos, String placa) {
+        Vehiculo o = BuscarVehiculo(l, placa);
+        if (o == null) {
             return "El vehiculo no existe";
         }
-        int eliminados = 0;
-        Iterator<ContratoRenting> it = contratos.iterator();
-        while (it.hasNext()) {
-            ContratoRenting o = it.next();
-            if (carro.getPlaca().equalsIgnoreCase(o.getPlacaVehiculo())) {
-                it.remove();
-                eliminados++;
+        int i = 0;
+        while (i < contratos.size()) {
+            if (contratos.get(i).getPlacaVehiculo().equalsIgnoreCase(placa)) {
+                contratos.remove(i);
+            } else {
+                i++;
             }
         }
-        vehiculos.remove(carro);
-        return "Vehiculo eliminado correctamente. Contratos eliminados: " + eliminados;
+        l.remove(o);
+        return "Vehiculo eliminado";
     }
 
-    public String ConsultarVehiculo(LinkedList<Vehiculo> vehiculos, String placa) {
-        Vehiculo carro = BuscarVehiculo(vehiculos, placa);
-        if (carro == null) {
+    public String ConsultarVehiculo(LinkedList<Vehiculo> l, String placa) {
+        Vehiculo o = BuscarVehiculo(l, placa);
+        if (o == null) {
             return "El vehiculo no existe";
         }
-        String tipo = "Vehiculo";
-        String extra = "";
-        if (carro instanceof CarroSedan) {
-            CarroSedan sedan = (CarroSedan) carro;
-            tipo = "Carro Sedan";
-            extra = "\nCombustible: " + sedan.getTipoCombustible()
-                    + "\nTransmision: " + sedan.getTransmision();
-        } else if (carro instanceof CamionetaSUV) {
-            CamionetaSUV suv = (CamionetaSUV) carro;
-            tipo = "Camioneta SUV";
-            extra = "\nTraccion: " + suv.getTraccion()
-                    + "\nMaletero (litros): " + suv.getCapacidadMaletero();
+        String texto = "Tipo: " + o.getTipo() + "\nPlaca: " + o.getPlaca() + "\nMarca: " + o.getMarca() + "\nModelo: " + o.getModelo()
+                + "\nPrecio diario: " + o.getPrecioDiario() + "\nEstado: " + o.getEstado();
+        if (o instanceof CarroSedan) {
+            CarroSedan s = (CarroSedan) o;
+            texto = texto + "\nCombustible: " + s.getTipoCombustible() + "\nTransmision: " + s.getTransmision();
         }
-        return "Tipo: " + tipo
-                + "\nPlaca: " + carro.getPlaca()
-                + "\nMarca: " + carro.getMarca()
-                + "\nModelo: " + carro.getModelo()
-                + "\nPrecio diario: " + carro.getPrecioDiario()
-                + "\nEstado: " + carro.getEstado()
-                + extra;
+        if (o instanceof CamionetaSUV) {
+            CamionetaSUV s = (CamionetaSUV) o;
+            texto = texto + "\nTraccion: " + s.getTraccion() + "\nMaletero: " + s.getCapacidadMaletero();
+        }
+        return texto;
     }
 }
