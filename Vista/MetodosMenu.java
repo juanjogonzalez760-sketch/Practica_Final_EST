@@ -14,6 +14,7 @@ import Validaciones.ValidacionesVehiculo;
 
 public class MetodosMenu {
     ValidacionesMenu v = new ValidacionesMenu();
+    Informe inf = new Informe();
     ValidacionesCliente vc = new ValidacionesCliente();
     ValidacionesVehiculo vv = new ValidacionesVehiculo();
     ValidacionesContrato vco = new ValidacionesContrato();
@@ -22,7 +23,6 @@ public class MetodosMenu {
     MetodosVehiculo mv = new MetodosVehiculo();
     MetodosContrato mco = new MetodosContrato();
 
-    // HU6: estructuras dinamicas (crecen al agregar y se reducen al eliminar).
     LinkedList<Cliente> clientes = new LinkedList<>();
     LinkedList<Vehiculo> vehiculos = new LinkedList<>();
     LinkedList<ContratoRenting> contratos = new LinkedList<>();
@@ -120,8 +120,6 @@ public class MetodosMenu {
         return "Regresando al menu principal";
     }
 
-    // ---------------- Clientes ----------------
-
     public String RegistrarCliente(Scanner sc) {
         System.out.println("Ingrese la cedula:");
         String cedula = vc.ValidarCedula(sc);
@@ -169,8 +167,6 @@ public class MetodosMenu {
         return mc.ConsultarCliente(clientes, cedula);
     }
 
-    // ---------------- Vehiculos ----------------
-
     public String RegistrarVehiculo(Scanner sc) {
         System.out.println("Tipo de vehiculo: 1. Carro sedan  2. Camioneta SUV");
         int tipo = v.ValidarOpcion(sc);
@@ -210,7 +206,7 @@ public class MetodosMenu {
         nuevo.setMarca(marca);
         nuevo.setModelo(modelo);
         nuevo.setPrecioDiario(precio);
-        nuevo.setEstado("disponible"); // un vehiculo nuevo siempre queda disponible
+        nuevo.setEstado("disponible");
         return mv.RegistrarVehiculo(vehiculos, nuevo);
     }
 
@@ -240,8 +236,6 @@ public class MetodosMenu {
         String placa = vv.ValidarPlaca(sc);
         return mv.ConsultarVehiculo(vehiculos, placa);
     }
-
-    // ---------------- Contratos ----------------
 
     public String RegistrarContrato(Scanner sc) {
         System.out.println("Ingrese el identificador del contrato:");
@@ -283,6 +277,6 @@ public class MetodosMenu {
     }
 
     public String ImprimirInformeGeneral() {
-        return "Informe general: funcionalidad pendiente de conectar.";
+        return inf.InformeGeneral(clientes, vehiculos, contratos);
     }
 }

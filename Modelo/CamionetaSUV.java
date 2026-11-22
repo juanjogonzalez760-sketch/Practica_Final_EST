@@ -14,7 +14,7 @@ public class CamionetaSUV extends Vehiculo {
     public String setTraccion(String traccion) {
         Traccion = traccion;
         return Traccion;
-    }   
+    }
 
     public float getCapacidadMaletero() {
         return CapacidadMaletero;
@@ -25,4 +25,13 @@ public class CamionetaSUV extends Vehiculo {
         return CapacidadMaletero;
     }
 
+    @Override
+    public String getTipo() {
+        return "Camioneta SUV";
+    }
+
+    @Override
+    public String detalleEspecifico() {
+        return "Traccion: " + Traccion + " | Maletero: " + CapacidadMaletero + " L";
+    }
 }

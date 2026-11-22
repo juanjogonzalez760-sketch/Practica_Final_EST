@@ -25,4 +25,15 @@ public class CarroSedan extends Vehiculo {
         return Transmision;
     }
 
-} 
+    @Override
+    public String getTipo() {
+        return "Carro Sedan";
+    }
+
+    
+
+    @Override
+    public String detalleEspecifico() {
+        return "Combustible: " + TipoCombustible + " | Transmision: " + Transmision;
+    }
+}
