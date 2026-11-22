@@ -7,6 +7,16 @@ public class CamionetaSUV extends Vehiculo {
     public CamionetaSUV() {
     }
 
+    @Override
+    public String getTipo() {
+        return "Camioneta SUV";
+    }
+
+    @Override
+    public String detalleEspecifico() {
+        return "Traccion: " + Traccion + " | Maletero: " + CapacidadMaletero + " L";
+    }
+
     public String getTraccion() {
         return Traccion;
     }

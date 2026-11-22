@@ -21,6 +21,7 @@ public class MetodosMenu {
     MetodosCliente mc = new MetodosCliente();
     MetodosVehiculo mv = new MetodosVehiculo();
     MetodosContrato mco = new MetodosContrato();
+    Informe inf = new Informe();
 
     // HU6: estructuras dinamicas (crecen al agregar y se reducen al eliminar).
     LinkedList<Cliente> clientes = new LinkedList<>();
@@ -283,6 +284,6 @@ public class MetodosMenu {
     }
 
     public String ImprimirInformeGeneral() {
-        return "Informe general: funcionalidad pendiente de conectar.";
+        return inf.InformeGeneral(clientes, vehiculos, contratos);
     }
 }

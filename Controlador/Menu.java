@@ -3,6 +3,7 @@ package Controlador;
 import java.util.Scanner;
 import Vista.MetodosMenu;
 import Validaciones.ValidacionesMenu;
+import Vista.Informe;
 
 public class Menu {
     public static void main(String[] args) {
